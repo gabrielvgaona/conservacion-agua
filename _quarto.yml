@@ -1,0 +1,29 @@
+project:
+  type: book
+  preview: 
+    port: 3393
+
+book:
+  title: "Conservación del agua"
+  subtitle: "Taller práctico"
+  author: "Gabriel Gaona"
+  date: "9/5/2022"
+  downloads: pdf
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+lang: es
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

@@ -1,0 +1,15 @@
+# Bienvenida {.unnumbered}
+
+Este taller será un guía para implementar estraégicamente decisiones basadas en criterios de conservación del agua, para determinar zonas de conservación.
+
+Usaremos una plantilla de proyecto de [QuartoPub](https://quarto.org/docs/books){target="_blank"}, en la cual intentaremos reproducir todos los contenidos paso a paso. Para aprender un poco más sobre este tipo de documentos, les recomiendo visitar la página web de quarto y su documentación.
+
+Usaremos programación en R para resolver los distintos ejercicios. Para lo cual vamos a requerir algunos paquetes, que deben ser instalados de forma manual.
+
+```{r}
+#| echo: true
+#| eval: false
+
+install.packages(c("knitr", "terra", "sf", "tidyverse", "ahp", "spData"))
+
+```

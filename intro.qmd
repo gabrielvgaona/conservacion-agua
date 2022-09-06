@@ -1,0 +1,136 @@
+# Introducción
+
+Esta primera parte nos introduciremos en conceptos básicos de manejo de datos espaciales. Veremos las ventajas y desventajas de los distintos modelos de datos. Además intentaremos definir el tipo de análisis espacial que nos será útil para el resto de los talleres.
+
+## Modelos de datos espaciales
+
+Los modelos de datos espaciales son estructuras que nos permiten organizar la información espacial, sus atributos y propiedades en objetos específicos bajo una lógica predefinida. Existen varios modelos de datos espaciales, entre los cuales destacaremos a los vectores y los rasteres.
+
+### Modelos geográficos:
+
+#### Campos
+
+Entre los campos tenemos a los escalares y los vectoriales.
+
+Los campos escalares son variaciones n-dimensionales representadas con un único valor por cada punto específico. Por ejemplo la temperatura, la elevación, la precipitación. Es decir variables cuya magnitud asignada a una ubicación depende de un solo valor (por lo general numérico) [@olaya2020]. Ejemplo: La cantidad promedio de lluvia en pulgadas para cada una de las 70 ciudades de Estados Unidos y Puerto Rico.
+
+```{r}
+precip
+```
+
+Por su par, te los campos vectoriales tienen un espacio multidimensional para ser representados. Es decir, son variables de fenómenos que requieren por lo menos dos valores para ser correctamente representados. Por ejemplo el viento depende de la dirección y su fuerza.
+
+```{r}
+library(ggplot2)
+data(wind.data, package = "rWind")
+
+ggplot(wind.data, 
+       aes(x = lon , 
+           y = lat, 
+           fill = speed, 
+           angle = dir, 
+           radius = scales::rescale(speed, c(.2, .8)))) +
+    geom_raster() +
+    geom_spoke(arrow = arrow(length = unit(.05, 'inches'), ends = "first", 
+                             type = "closed"),
+               size = 0.3) + 
+    scale_fill_distiller(palette = "RdYlGn") + 
+    coord_sf(crs = 4326, expand = 0)
+
+```
+
+#### Entidades discretas
+
+El modelo de entidades discretas no asocia a cada punto geográfico un valor, sino que concibe un entorno geográfico como un espacio vacío sobre el que se sitúan distintos elementos (entidades) que lo van rellenando @olaya2020.
+
+Las variables de tipo nominal y alfanumérico ---las cuales no son continuas--- tales como el tipo de suelo en un punto o la cobertura vegetal al que pertenece dicho punto, son buenos ejemplos de modelo de entidades discretas.
+
+### Modelos de representación
+
+En SIG hay distintas maneras de representar la misma variable para su análisis. Veamos en el siguiente ejemplo 4 formas para representar la información altitudinal (@fig-modrep).
+
+::: {#fig-modrep layout-ncol="2"}
+![Vector: Curvas de nivel](img/modelos_representacion_a.png){#fig-vector}
+
+![Raster: Pixeles](img/modelos_representacion_b.png){#fig-raster}
+
+![Red de triángulos](img/modelos_representacion_c.png){#fig-tin}
+
+![Malla de puntos](img/modelos_representacion_d.png){#fig-malla}
+
+Distintas formas de representar una capa con información altitudinal [@olaya2020]
+:::
+
+Los dos primeros modelos de representación son los más conocidos y serán los que exploraremos en este curso.
+
+#### Modelo vector
+
+Se trata de uns representación discreta de las entidades. La particularidad de este modelo es que usa formas definidas para abstraer el fenómeno espacial. Entre estas formas están: los **puntos**, las **líneas** y los **polígonos**. Es útil para variables que son discretas en el espacio. Por ejemplo: vías, ríos, casas, etc
+
+#### Modelo Raster
+
+Este es un modelo en el cual se utiliza una discretización regular del espacio, que comunmente se conoce como pixeles. Es más útil para abstraer fenómenos continuos en el espacio. Por ejemplo temperatura del suelo, precipitación, topografía, etc.
+
+::: callout-tip
+## Comparación entre raster y vector
+
+En ocasiones una entidad discreta también puede usarse con el modelo raster. Lo cual para fines prácticos es útil, pero para representación cartográfica quizá no lo es (por ejemplo las vías). Y en otras ocasiones, se requiere lo contrario (por ejemplo, representar la topografía con entidades discretas.). Veamos una comparación de una entidad discreta representada con ambos modelos (@fig-viamodrep):
+:::
+
+::: {#fig-viamodrep layout-ncol="2"}
+![Raster](img/vias_modelos_representacion_a.png){#fig-viasraster}
+
+![Vector](img/vias_modelos_representacion_b.png){#fig-viasvector}
+
+Raster vs. Vector. Comparando ambos modelos [@olaya2020].
+:::
+
+## Por qué usamos R para esta clase?
+
+R es un lenguaje de programación de código abierto, que nos permite implementar y resolver muchos problemas de cálculo. Pero además, nos permite desarrollar la lógica para resolver problemas cálculo en hidrología. De manera complementaria, estaremos aprendiendo una nueva forma de hacer reportes a partir de los análisis de R. Esto último se conoce como programación literal y consiste en combinar texto literal en lenguaje para humanos y código de programación en bloques. Para saber más sobre programación literal le recomiendo ver @knuth84.
+
+## Recomendación para usar R en Windows:
+
+Se recomienda actualizar R y Rstudio a la versión más reciente. Si ya tiene pre-instalado R, puede usar  el paquete "installr" para actualizar semi-automáticamente. Para usar este paquete se reuiere ejecutar desde R commander
+
+```{r}
+#| echo: true
+#| eval: false
+
+# install.packages("installr")
+library(installr) 
+update.r()
+```
+
+
+## Práctica: Explorar datos espaciales con R
+
+Usaremos como referencia el libro de *Geocomputation with R* de @lovelace2019, específicamente todos los capítulos de *Foundations*. Pueden leer el libro en linea en [https://geocompr.robinlovelace.net/](https://geocompr.robinlovelace.net/){target="_blank"}. 
+
+### Explorando vectores
+
+Necesitaremos el paquete `sf` y `spData`. Si no los tiene instalados, puede instalarlos en este momento.
+
+Exploraremos dos ficheros _shapefile_ que vienen en la instalación por defecto. El primero es `world.shp` que es parte del paquete `spData`. El segundo es `rivers` que también es parte de `spData`. 
+
+- ¿Qué tipo de modelo de representación es?
+- ¿Cuántos atributos tiene cada capa?
+- ¿Cuál es el sistema de coordenadas de referencia (CRS)?
+- ¿Qué tipo de modelos geográficos contienen esas capas?
+- ¿Cuál es la extensión de cada uno?
+
+### Explorando rasters
+
+Ahora necesitaremos los paquetes `terra` y `spData`. Si no los tiene instalados, puede instalarlos en este momento.
+
+Exploraremos dos ficheros _GeoTiff_ que vienen en la instalación por defecto de `spData`. Los ficheros son `elev.tif` y `grain.tif`. 
+
+- ¿Qué tipo de modelo de representación es?
+- ¿Cuántas variables tiene cada capa?
+- ¿Cuál es el sistema de coordenadas de referencia (CRS)?
+- ¿Qué tipo de modelos geográficos contienen esas capas?
+- ¿Cuál es la extensión de cada uno?
+- ¿Qué resolución tiene cada capa?
+
+### Extraer información de las capas espaciales
+
