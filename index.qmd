@@ -1,6 +1,6 @@
 # Bienvenida {.unnumbered}
 
-Este taller será un guía para implementar estraégicamente decisiones basadas en criterios de conservación del agua, para determinar zonas de conservación.
+Este taller será un guía para implementar estratégicamente decisiones basadas en criterios de conservación del agua, para determinar zonas de conservación.
 
 Usaremos una plantilla de proyecto de [QuartoPub](https://quarto.org/docs/books){target="_blank"}, en la cual intentaremos reproducir todos los contenidos paso a paso. Para aprender un poco más sobre este tipo de documentos, les recomiendo visitar la página web de quarto y su documentación.
 
@@ -10,6 +10,21 @@ Usaremos programación en R para resolver los distintos ejercicios. Para lo cual
 #| echo: true
 #| eval: false
 
-install.packages(c("knitr", "terra", "sf", "tidyverse", "ahp", "spData"))
+install.packages(c("quarto", "knitr", "terra", "sf", "tidyverse", 
+                   "ahp", "spData", "tmap"))
 
 ```
+
+## Sílabo del curso
+
+Puede descargar el documento detallado del sílabo desde el siguiente enlace: \[Sílabo - Conservación del Agua\](documentos/conservacion_del_agua-silabo.pdf){target="\_blank"}
+
+### Fechas importantes
+
+-   12 octubre: Taller análisis de trabajo
+
+-   8 noviembre: Taller trabajo general, preguntas, revisión del curso
+
+-   9 de noviembre: Presentación del trabajo final
+
+-   16 noviembre: Examen

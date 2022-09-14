@@ -1,6 +1,10 @@
-# Introducción
+# Fundamentos de los datos espaciales
 
 Esta primera parte nos introduciremos en conceptos básicos de manejo de datos espaciales. Veremos las ventajas y desventajas de los distintos modelos de datos. Además intentaremos definir el tipo de análisis espacial que nos será útil para el resto de los talleres.
+
+## Sistemas de coordendas
+
+Los sistemas de coordenadas permiten definir un espacio de trabajo virtual, donde los modelos espaciales pueden intereactuar entre si. Lo más básico de los sistemas de referencias de coordenadas son los espacios bi-dimensionales, como por ejemplo un plano cartesiano. En gegrafía, los sistemas de referencia toman en cuenta un ubicación real de la tierra como punto de origen del plano. Existen dos tipos de sistemas de referencia: Geográficos y Proyectados.
 
 ## Modelos de datos espaciales
 
@@ -91,7 +95,7 @@ R es un lenguaje de programación de código abierto, que nos permite implementa
 
 ## Recomendación para usar R en Windows:
 
-Se recomienda actualizar R y Rstudio a la versión más reciente. Si ya tiene pre-instalado R, puede usar  el paquete "installr" para actualizar semi-automáticamente. Para usar este paquete se reuiere ejecutar desde R commander
+Se recomienda actualizar R y Rstudio a la versión más reciente. Si ya tiene pre-instalado R, puede usar el paquete "installr" para actualizar semi-automáticamente. Para usar este paquete se reuiere ejecutar desde R commander
 
 ```{r}
 #| echo: true
@@ -99,38 +103,68 @@ Se recomienda actualizar R y Rstudio a la versión más reciente. Si ya tiene pr
 
 # install.packages("installr")
 library(installr) 
-update.r()
+update.R()
 ```
-
 
 ## Práctica: Explorar datos espaciales con R
 
-Usaremos como referencia el libro de *Geocomputation with R* de @lovelace2019, específicamente todos los capítulos de *Foundations*. Pueden leer el libro en linea en [https://geocompr.robinlovelace.net/](https://geocompr.robinlovelace.net/){target="_blank"}. 
+Usaremos como referencia el libro de *Geocomputation with R* de @lovelace2019, específicamente todos los capítulos de *Foundations*. Pueden leer el libro en linea en [https://geocompr.robinlovelace.net/](https://geocompr.robinlovelace.net/){target="_blank"}.
 
 ### Explorando vectores
 
 Necesitaremos el paquete `sf` y `spData`. Si no los tiene instalados, puede instalarlos en este momento.
 
-Exploraremos dos ficheros _shapefile_ que vienen en la instalación por defecto. El primero es `world.shp` que es parte del paquete `spData`. El segundo es `rivers` que también es parte de `spData`. 
+Exploraremos dos ficheros *shapefile* que vienen en la instalación por defecto. El primero es `world.shp` que es parte del paquete `spData`. El segundo es `seine` que también es parte de `spData`.
 
-- ¿Qué tipo de modelo de representación es?
-- ¿Cuántos atributos tiene cada capa?
-- ¿Cuál es el sistema de coordenadas de referencia (CRS)?
-- ¿Qué tipo de modelos geográficos contienen esas capas?
-- ¿Cuál es la extensión de cada uno?
+-   ¿Qué tipo de modelo de representación es?
+-   ¿Cuántos atributos tiene cada capa?
+-   ¿Cuál es el sistema de coordenadas de referencia (CRS)?
+-   ¿Qué tipo de modelos geográficos contienen esas capas?
+-   ¿Cuál es la extensión de cada uno?
 
 ### Explorando rasters
 
 Ahora necesitaremos los paquetes `terra` y `spData`. Si no los tiene instalados, puede instalarlos en este momento.
 
-Exploraremos dos ficheros _GeoTiff_ que vienen en la instalación por defecto de `spData`. Los ficheros son `elev.tif` y `grain.tif`. 
+Exploraremos dos ficheros *GeoTiff* que vienen en la instalación por defecto de `terra`. Los ficheros son `elev.tif` y `meuse.tif`.
 
-- ¿Qué tipo de modelo de representación es?
-- ¿Cuántas variables tiene cada capa?
-- ¿Cuál es el sistema de coordenadas de referencia (CRS)?
-- ¿Qué tipo de modelos geográficos contienen esas capas?
-- ¿Cuál es la extensión de cada uno?
-- ¿Qué resolución tiene cada capa?
+-   ¿Qué tipo de modelo de representación es?
+-   ¿Cuántas variables tiene cada capa?
+-   ¿Cuál es el sistema de coordenadas de referencia (CRS)?
+-   ¿Qué tipo de modelos geográficos contienen esas capas?
+-   ¿Cuál es la extensión de cada uno?
+-   ¿Qué resolución tiene cada capa?
 
 ### Extraer información de las capas espaciales
 
+-   ¿Cuántas entidades tienen los ficheros `shapefile`?
+-   De la capa `world.shp`, extraiga todas las entidades que pertenezcan al continente `"South America"`?
+-   ¿Cuál es la población total de esa selección?
+-   Ahora, usando la capa `seine` calcule la longitud total de los ríos de esa capa.
+-   ¿Cuál es el río más largo?
+-   ¿En qué país está ubicado el Río Seine?
+-   Usando el modelo de elevaciones, calcule la pendiente del terreno.
+
+```{r}
+#| eval: false
+#| echo: false
+library(sf)
+world <- st_read(system.file("shapes/world.shp", package = "spData"))
+nrow(world)
+world[world$continent == "South America", ]
+data(seine, package = "spData")
+world[seine[which.max(st_length(seine)),] |> 
+    st_geometry() |> 
+    st_transform(crs = st_crs(world)) |> 
+    st_intersects(world) |> 
+        as.numeric(), ]
+
+library(terra)
+
+elev <- rast(system.file("ex/elev.tif", package="terra"))
+slope <- terrain(elev, v = "slope")
+plot(slope)
+
+meuse <- rast(system.file("ex/meuse.tif", package="terra"))
+plot(meuse)
+```

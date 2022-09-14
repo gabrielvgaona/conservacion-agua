@@ -1,18 +1,42 @@
 project:
   type: book
   output-dir: "docs"
+  
   preview: 
     port: 3393
 
 book:
   title: "Conservación del agua"
   subtitle: "Taller práctico"
-  author: "Gabriel Gaona"
+  author:
+    - name: Gabriel Gaona
+      url: http://gavg712.com
+      affiliations: 
+        - id: ucuenca
+          name: Universidad de Cuenca
+          region: Ecuador
+          url: https://www.ucuenca.edu.ec
+        - id: ugiessen
+          name: Justus-Liebig Universität Giessen
+          region: Germany
+          url: https://www.uni-giessen.de
+      orcid: 0000-0003-4666-2248
+    - name: Juan Pesántez
+      url: http://www.ucuenca.edu.com
+      affiliation:
+        - id: ucuenca
+          name: Universidad de Cuenca
+          region: Ecuador
+          url: https://www.ucuenca.edu.ec
+      orcid: 0000-0003-4640-4556
+
   date: "9/5/2022"
   downloads: pdf
   chapters:
     - index.qmd
-    - intro.qmd
+    - part: "Introducción"
+      chapters: 
+        - contenidos/intro.qmd
     #- summary.qmd
     - references.qmd
 
